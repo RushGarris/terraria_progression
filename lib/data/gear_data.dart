@@ -4,11 +4,13 @@ class GearLoadout {
   final List<GearItem> weapons;
   final List<GearItem> armor;
   final List<GearItem> accessories;
+  final List<GearItem> permUpgrades;
 
   const GearLoadout({
     required this.weapons,
     required this.armor,
     required this.accessories,
+    required this.permUpgrades,
   });
 }
 
@@ -19,25 +21,83 @@ class GearData {
     'melee:pre_eye': GearLoadout(
       weapons: [
         
-        GearItem(name: 'Blade of Grass', note: 'Made from jungle materials'),
-        GearItem(name: 'Starfury', note: 'Found in sky island chests'),
-        GearItem(name: 'Mandible Blade', note: 'Dropped by Antlion Chargers/Swarmers'),
-        GearItem(name: 'Amazon', note: 'Made from jungle materials'),
-        GearItem(name: 'Stylish Scissors', note: 'Dropped by killing the Stylist NPC'),
+        GearItem(name: 'Blade of Grass / Starfury',),
+        GearItem(name: 'Storm Spear / Swordfish',),
+        GearItem(name: 'Thron Chakram / Trimarang',),
+        GearItem(name: 'Amazon',),
+        
       ],
       armor: [
-        GearItem(name: 'Platinum / Gold Armor', note: 'Best basic ore armor'),
-        GearItem(name: 'Fossil Armor', note: 'Not melee-focused, but decent early defense'),
+        GearItem(name: 'Platinum / Gold Armor',),
       ],
       accessories: [
-        GearItem(name: 'Hermes Boots / Flurry Boots', note: 'Found in gold chests', imagePath: 'assets/gear/accessories/hermes_boots.png'),
-        GearItem(name: 'Cloud in a Bottle', note: 'Found in gold chests', imagePath: 'assets/classes/melee.jpg'),
-        GearItem(name: 'Band of Regeneration', note: 'Found in gold chests'),
-        GearItem(name: 'Feral Claws', note: 'Found in jungle chests'),
-        GearItem(name: 'Shark Tooth Necklace', note: 'Dropped by zombies'),
-        GearItem(name: 'String*', note: 'Only use if using yoyo'),
+        GearItem(name: 'Hermes Boots / Flurry Boots', imagePath: 'assets/gear/accessories/hermes_boots.png'),
+        GearItem(name: 'Sandstorm in a Bottle', ),
+        GearItem(name: 'Band of Regeneration', ),
+        GearItem(name: 'Feral Claws', ),
+        GearItem(name: 'Shark Tooth Necklace',),
+        GearItem(name: 'Frog Leg / Shiny Red Balloon',),
       ],
+      permUpgrades: [
+        GearItem(name: "Life Crystal (15)" ),
+        GearItem(name: "Vital Crystal" ),
+      ]
     ),
+      
+    'melee:pre_evil_boss': GearLoadout(
+            weapons: [
+        
+        GearItem(name: 'Blade of Grass / Starfury',),
+        GearItem(name: 'The Rotted Fork / Storm Spear',),
+        GearItem(name: "Ball O' Hurt / Trimarang",),
+        GearItem(name: 'Artery / Amazon',),
+        
+      ],
+      armor: [
+        GearItem(name: 'Platinum / Gold Armor',),
+      ],
+      accessories: [
+        GearItem(name: 'Terraspark Boots',),
+        GearItem(name: 'Bundle of Horseshoe Balloons', ),
+        GearItem(name: 'Shield of Cythulu', ),
+        GearItem(name: 'Feral Claws', ),
+        GearItem(name: 'Shark Tooth Necklace',),
+        GearItem(name: 'Frog Gear',),
+        
+      ],
+
+      permUpgrades: [
+        GearItem(name: "n/a"),
+      ]
+    ),
+
+        'melee:pre_skeletron': GearLoadout(
+      weapons: [
+        
+        GearItem(name: 'Volcano / Phaseblade',),
+        GearItem(name: 'The Rotted Fork / Storm Spear',),
+        GearItem(name: 'Flamarang',),
+        GearItem(name: 'Hive-Five',),
+        
+      ],
+      armor: [
+        GearItem(name: 'Molten Armor',),
+      ],
+      accessories: [
+        GearItem(name: 'Terraspark Boots',),
+        GearItem(name: 'Bundle of Horseshoe Balloons', ),
+        GearItem(name: 'Shield of Cythulu', ),
+        GearItem(name: 'Feral Claws', ),
+        GearItem(name: 'Stinger / Sweethear Necklace',),
+        GearItem(name: 'Worm Scarf / Brain of Confusion',),
+        
+      ],
+      permUpgrades: [
+        GearItem(name: "n/a")
+      ]
+    ),
+
+
   };
 
   static GearLoadout? getLoadout({
