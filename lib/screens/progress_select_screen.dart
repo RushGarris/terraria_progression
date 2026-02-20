@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/player_class.dart';
+import 'gear_results_screen.dart';
 
 class ProgressSelectScreen extends StatelessWidget {
   final PlayerClass playerClass;
@@ -76,13 +77,11 @@ class ProgressSelectScreen extends StatelessWidget {
           return _StageTile(
             stage: stage,
             onTap: () {
-              // TODO: Navigate to results screen and pass playerClass + stage
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Selected: ${playerClass.name} — ${stage.title}',
-                  ),
-                  duration: const Duration(milliseconds: 900),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      GearResultsScreen(playerClass: playerClass, stage: stage),
                 ),
               );
             },
@@ -125,32 +124,31 @@ class _StageTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
-             Container(
-              decoration:
-              BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(255, 211, 113, 151),
-                    blurRadius: 40,
-                    spreadRadius: 1,
-                  ),
-                ],
-             ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: SizedBox(
-                  width: 72,
-                  height: 72,
-                  child: Image.asset(
-                    stage.gifPath,
-                    fit: BoxFit.contain,
-                    alignment: Alignment.center,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.videogame_asset, size: 40),
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 211, 113, 151),
+                      blurRadius: 40,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: SizedBox(
+                    width: 72,
+                    height: 72,
+                    child: Image.asset(
+                      stage.gifPath,
+                      fit: BoxFit.contain,
+                      alignment: Alignment.center,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.videogame_asset, size: 40),
+                    ),
                   ),
                 ),
               ),
-             ),
 
               const SizedBox(width: 14),
               Expanded(
