@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "480066974770",
+    "project_id": "terraria-progression",
+    "storage_bucket": "terraria-progression.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:480066974770:android:1a36f4e90db188ca22f82b",
+        "android_client_info": {
+          "package_name": "com.example.terraria_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtGzE20ZTInLcK7JldN_c9g9pW29XJT5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/player_class.dart';
 import 'gear_results_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProgressSelectScreen extends StatelessWidget {
+class ProgressSelectScreen extends StatefulWidget {
   final PlayerClass playerClass;
 
   const ProgressSelectScreen({super.key, required this.playerClass});
@@ -65,23 +66,78 @@ class ProgressSelectScreen extends StatelessWidget {
   ];
 
   @override
+  State<ProgressSelectScreen> createState() => _ProgressSelectScreenState();
+}
+
+class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
+  // Save per-class so Melee/Ranger/etc can have different progress
+  String get _prefsKey => 'completedStages_${widget.playerClass.id}';
+
+  Set<String> _completedStageIds = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCompleted();
+  }
+
+  Future<void> _loadCompleted() async {
+    final prefs = await SharedPreferences.getInstance();
+    final list = prefs.getStringList(_prefsKey) ?? <String>[];
+    if (!mounted) return;
+    setState(() => _completedStageIds = list.toSet());
+  }
+
+  Future<void> _setCompleted(String stageId, bool completed) async {
+    setState(() {
+      if (completed) {
+        _completedStageIds.add(stageId);
+      } else {
+        _completedStageIds.remove(stageId);
+      }
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_prefsKey, _completedStageIds.toList());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${playerClass.name} Progress')),
+      appBar: AppBar(
+        title: Text('${widget.playerClass.name} Progress'),
+        actions: [
+          IconButton(
+            tooltip: 'Reset',
+            onPressed: () async {
+              setState(() => _completedStageIds.clear());
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.remove(_prefsKey);
+            },
+            icon: const Icon(Icons.restart_alt),
+          ),
+        ],
+      ),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
-        itemCount: stages.length,
+        itemCount: ProgressSelectScreen.stages.length,
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
-          final stage = stages[index];
+          final stage = ProgressSelectScreen.stages[index];
+          final isDone = _completedStageIds.contains(stage.id);
+
           return _StageTile(
             stage: stage,
+            isDone: isDone,
+            onChanged: (v) => _setCompleted(stage.id, v),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                      GearResultsScreen(playerClass: playerClass, stage: stage),
+                  builder: (_) => GearResultsScreen(
+                    playerClass: widget.playerClass,
+                    stage: stage,
+                  ),
                 ),
               );
             },
@@ -110,10 +166,22 @@ class _StageTile extends StatelessWidget {
   final ProgressStage stage;
   final VoidCallback onTap;
 
-  const _StageTile({required this.stage, required this.onTap});
+  final bool isDone;
+  final ValueChanged<bool> onChanged;
+
+  const _StageTile({
+    required this.stage,
+    required this.onTap,
+    required this.isDone,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final glowColor = isDone
+        ? const Color.fromARGB(255, 90, 220, 140) // green glow
+        : const Color.fromARGB(255, 211, 113, 151); // your original pink/red glow
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -124,11 +192,13 @@ class _StageTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
-              Container(
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: const Color.fromARGB(255, 211, 113, 151),
+                      color: glowColor,
                       blurRadius: 40,
                       spreadRadius: 1,
                     ),
@@ -149,7 +219,6 @@ class _StageTile extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -168,7 +237,18 @@ class _StageTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              const Icon(Icons.chevron_right),
+
+              // Checkbox + chevron, like your screenshot
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Checkbox(
+                    value: isDone,
+                    onChanged: (v) => onChanged(v ?? false),
+                  ),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
             ],
           ),
         ),
