@@ -10,7 +10,19 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseAuth.instance.signInAnonymously();
+debugPrint("➡️ attempting anonymous sign-in...");
+
+try {
+  final cred = await FirebaseAuth.instance.signInAnonymously();
+  debugPrint("✅ signed in: ${cred.user?.uid}");
+} on FirebaseAuthException catch (e) {
+  debugPrint("❌ FirebaseAuthException code=${e.code} message=${e.message}");
+} catch (e, st) {
+  debugPrint("❌ Non-Firebase error: $e");
+  debugPrint("$st");
+}
+
+debugPrint("➡️ sign-in block finished");
 
   runApp(const TerrariaGuideApp());
 }
