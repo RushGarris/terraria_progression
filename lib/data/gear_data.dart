@@ -15,8 +15,6 @@ class GearLoadout {
 }
 
 class GearData {
-  /// Key format: "<classId>:<stageId>"
-  /// Example: "melee:pre_eye"
   static const Map<String, GearLoadout> loadouts = {
     'melee:pre_eye': GearLoadout(
       weapons: [

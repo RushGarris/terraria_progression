@@ -109,7 +109,7 @@ class _ClassTile extends StatelessWidget {
                     child: Image.asset(
                       playerClass.assetPath,
                       fit: BoxFit.contain,
-                      errorBuilder: (_, __, ___) =>
+                      errorBuilder: (_, _, _) =>
                           const Icon(Icons.image, size: 72),
                     ),
                   ),

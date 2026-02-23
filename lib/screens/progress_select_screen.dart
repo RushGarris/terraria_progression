@@ -121,7 +121,7 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: ProgressSelectScreen.stages.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
           final stage = ProgressSelectScreen.stages[index];
           final isDone = _completedStageIds.contains(stage.id);

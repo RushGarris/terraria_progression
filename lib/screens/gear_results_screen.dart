@@ -105,7 +105,7 @@ class _Section extends StatelessWidget {
                           child: Image.asset(
                             item.imagePath!,
                             fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) =>
+                            errorBuilder: (_, _, _) =>
                                 const Icon(
                                   Icons.image_not_supported,
                                   size: 22,
