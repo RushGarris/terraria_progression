@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'firebase_options.dart';
 import 'screens/class_select_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,19 +11,19 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-debugPrint("➡️ attempting anonymous sign-in...");
 
-try {
-  final cred = await FirebaseAuth.instance.signInAnonymously();
-  debugPrint("✅ signed in: ${cred.user?.uid}");
-} on FirebaseAuthException catch (e) {
-  debugPrint("❌ FirebaseAuthException code=${e.code} message=${e.message}");
-} catch (e, st) {
-  debugPrint("❌ Non-Firebase error: $e");
-  debugPrint("$st");
-}
-
-debugPrint("➡️ sign-in block finished");
+  try {
+    print('➡️ attempting email/password sign-in...');
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: 'test@test.com',
+      password: 'Test1234!',
+    );
+    print('✅ signed in!');
+  } on FirebaseAuthException catch (e) {
+    print('❌ FirebaseAuthException code=${e.code} message=${e.message}');
+  } catch (e) {
+    print('❌ Unknown error: $e');
+  }
 
   runApp(const TerrariaGuideApp());
 }
