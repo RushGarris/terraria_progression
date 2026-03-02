@@ -25,7 +25,7 @@ class ProgressSelectScreen extends StatefulWidget {
       id: 'pre_skeletron',
       title: 'Pre-Skeletron',
       subtitle: 'Dungeon prep and mid-prehardmode upgrades',
-      gifPath: 'assets/bosses/skeletron.png',
+      gifPath: 'assets/bosses/Skeletron.png',
     ),
     ProgressStage(
       id: 'pre_wall_of_flesh',
