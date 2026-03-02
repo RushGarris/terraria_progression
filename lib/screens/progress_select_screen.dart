@@ -70,7 +70,7 @@ class ProgressSelectScreen extends StatefulWidget {
 }
 
 class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
-  // Save per-class so Melee/Ranger/etc can have different progress
+  
   String get _prefsKey => 'completedStages_${widget.playerClass.id}';
 
   Set<String> _completedStageIds = {};
@@ -179,8 +179,8 @@ class _StageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final glowColor = isDone
-        ? const Color.fromARGB(255, 90, 220, 140) // green glow
-        : const Color.fromARGB(255, 211, 113, 151); // your original pink/red glow
+        ? const Color.fromARGB(255, 90, 220, 140) 
+        : const Color.fromARGB(255, 211, 113, 151); 
 
     return InkWell(
       onTap: onTap,
@@ -238,7 +238,6 @@ class _StageTile extends StatelessWidget {
               ),
               const SizedBox(width: 10),
 
-              // Checkbox + chevron, like your screenshot
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
