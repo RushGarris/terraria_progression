@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../models/player_class.dart';
 import 'gear_results_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProgressSelectScreen extends StatefulWidget {
   final PlayerClass playerClass;
@@ -70,25 +72,56 @@ class ProgressSelectScreen extends StatefulWidget {
 }
 
 class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
-  
-  String get _prefsKey => 'completedStages_${widget.playerClass.id}';
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Set<String> _completedStageIds = {};
+  bool _loading = true;
+
+  String get _classId => widget.playerClass.id;
+
+  String get _uid {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) throw StateError('Not logged in');
+    return user.uid;
+  }
+
+  DocumentReference<Map<String, dynamic>> get _userDoc =>
+      _db.collection('users').doc(_uid);
 
   @override
   void initState() {
     super.initState();
-    _loadCompleted();
+    _loadCompletedFromFirestore();
   }
 
-  Future<void> _loadCompleted() async {
-    final prefs = await SharedPreferences.getInstance();
-    final list = prefs.getStringList(_prefsKey) ?? <String>[];
-    if (!mounted) return;
-    setState(() => _completedStageIds = list.toSet());
+  Future<void> _loadCompletedFromFirestore() async {
+    try {
+      final snap = await _userDoc.get();
+      final data = snap.data();
+
+      final progressByClass =
+          (data?['progressByClass'] as Map?)?.cast<String, dynamic>() ?? {};
+
+      final list = (progressByClass[_classId] as List?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          <String>[];
+
+      if (!mounted) return;
+      setState(() {
+        _completedStageIds = list.toSet();
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+      // ignore: avoid_print
+      print('Firestore load error: $e');
+    }
   }
 
   Future<void> _setCompleted(String stageId, bool completed) async {
+    // optimistic UI
     setState(() {
       if (completed) {
         _completedStageIds.add(stageId);
@@ -97,8 +130,25 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
       }
     });
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(_prefsKey, _completedStageIds.toList());
+    
+    await _userDoc.set({
+      'email': FirebaseAuth.instance.currentUser?.email,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'progressByClass': {
+        _classId: _completedStageIds.toList(),
+      },
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> _resetProgress() async {
+    setState(() => _completedStageIds.clear());
+
+    await _userDoc.set({
+      'updatedAt': FieldValue.serverTimestamp(),
+      'progressByClass': {
+        _classId: <String>[],
+      },
+    }, SetOptions(merge: true));
   }
 
   @override
@@ -109,41 +159,39 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
         actions: [
           IconButton(
             tooltip: 'Reset',
-            onPressed: () async {
-              setState(() => _completedStageIds.clear());
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.remove(_prefsKey);
-            },
+            onPressed: _resetProgress,
             icon: const Icon(Icons.restart_alt),
           ),
         ],
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: ProgressSelectScreen.stages.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final stage = ProgressSelectScreen.stages[index];
-          final isDone = _completedStageIds.contains(stage.id);
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: ProgressSelectScreen.stages.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final stage = ProgressSelectScreen.stages[index];
+                final isDone = _completedStageIds.contains(stage.id);
 
-          return _StageTile(
-            stage: stage,
-            isDone: isDone,
-            onChanged: (v) => _setCompleted(stage.id, v),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => GearResultsScreen(
-                    playerClass: widget.playerClass,
-                    stage: stage,
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
+                return _StageTile(
+                  stage: stage,
+                  isDone: isDone,
+                  onChanged: (v) => _setCompleted(stage.id, v),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => GearResultsScreen(
+                          playerClass: widget.playerClass,
+                          stage: stage,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }
@@ -179,8 +227,8 @@ class _StageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final glowColor = isDone
-        ? const Color.fromARGB(255, 90, 220, 140) 
-        : const Color.fromARGB(255, 211, 113, 151); 
+        ? const Color.fromARGB(255, 90, 220, 140)
+        : const Color.fromARGB(255, 211, 113, 151);
 
     return InkWell(
       onTap: onTap,
@@ -237,7 +285,6 @@ class _StageTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
