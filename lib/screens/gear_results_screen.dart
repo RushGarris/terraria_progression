@@ -34,6 +34,8 @@ class GearResultsScreen extends StatelessWidget {
                 _Section(title: 'Armor', items: loadout.armor),
                 const SizedBox(height: 12),
                 _Section(title: 'Accessories', items: loadout.accessories),
+                const SizedBox(height: 12,),
+                _Section(title: 'Permanent Upgrades', items: loadout.permUpgrades)
               ],
             ),
     );
@@ -56,7 +58,7 @@ class _EmptyState extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Text(
           'No gear added yet for ${playerClass.name} — ${stage.title}.\n\n'
-          'Next step: add a loadout in lib/data/gear_data.dart',
+          'Next step: add a loadout in lib/data/gear_data._${playerClass.id}.dart',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleMedium,
         ),
