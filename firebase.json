@@ -1,1 +1,32 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"terraria-progression","appId":"1:480066974770:android:1a36f4e90db188ca22f82b","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"terraria-progression","configurations":{"android":"1:480066974770:android:1a36f4e90db188ca22f82b"}}}}}}
+{
+    "flutter": {
+      "platforms": {
+        "android": {
+          "default": {
+            "projectId": "terraria-progression",
+            "appId": "1:480066974770:android:1a36f4e90db188ca22f82b",
+            "fileOutput": "android/app/google-services.json"
+          }
+        },
+        "dart": {
+          "lib/firebase_options.dart": {
+            "projectId": "terraria-progression",
+            "configurations": {
+              "android": "1:480066974770:android:1a36f4e90db188ca22f82b"
+            }
+          }
+        }
+      }
+    },
+    "hosting": {
+      "public": "build/web",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        { "source": "**", "destination": "/index.html" }
+      ]
+    }
+  }

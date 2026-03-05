@@ -74,4 +74,151 @@ const Map<String, GearLoadout> meleeLoadouts = {
       GearItem(name: 'n/a'),
     ],
   ),
+
+  'pre_wall_of_flesh': GearLoadout(
+    weapons: [
+      GearItem(name: 'Nights Edge'),
+      GearItem(name: 'Dark Lance'),
+      GearItem(name: 'Sunfury / Flamarang'),
+      GearItem(name: 'Hive-Five'),
+    ],
+    armor: [
+      GearItem(name: 'Molten Armor'),
+    ],
+    accessories: [
+      GearItem(name: 'Terraspark Boots'),
+      GearItem(name: 'Bundle of Horseshoe Balloons'),
+      GearItem(name: 'Shield of Cthulhu'),
+      GearItem(name: 'Feral Claws'),
+      GearItem(name: 'Obsidian Shield'),
+      GearItem(name: 'Worm Scarf / Brain of Confusion'),
+    ],
+    permUpgrades: [
+      GearItem(name: 'n/a'),
+    ],
+  ),
+
+  'pre_mech_bosses': GearLoadout(
+    weapons: [
+      GearItem(name: 'Flint / Ice Sickle'),
+      GearItem(name: 'Obsidian Swordfish'),
+      GearItem(name: 'Bananarang'),
+      GearItem(name: 'Amarok / Hel-Fire'),
+    ],
+    armor: [
+      GearItem(name: 'Titanium / Adamantite Armor'),
+    ],
+    accessories: [
+      GearItem(name: 'Terraspark Boots'),
+      GearItem(name: 'T1 Wings', note: 'Fairy, Fin, Frozen, or Harpy Wings'),
+      GearItem(name: 'Shield of Cthulhu'),
+      GearItem(name: 'Beserkers Glove'),
+      GearItem(name: 'Warrior Emblem'),
+      GearItem(name: 'Frozen Turtle Shell / Ankh Shield'),
+      GearItem(name: 'Star Veil / Charm of Myths'),
+    ],
+    permUpgrades: [
+      GearItem(name: 'Demon Heart'),
+    ],
+  ),
+
+'pre_plantera': GearLoadout(
+  weapons: [
+    GearItem(name: "True Excalibur / True Night's Edge"),
+    GearItem(name: 'Ghastly Glaive / Chlorophyte Partisan'),
+    GearItem(name: 'Light Disc'),
+    GearItem(name: "Valkyrie Yoyo / Red's Throw"),
+  ],
+  armor: [
+    GearItem(name: 'Hallowed / Turtle Armor'),
+  ],
+  accessories: [
+    GearItem(name: 'Terraspark Boots'),
+    GearItem(name: 'T2/T3 Wings', note: 'Bat, Bee, Butterfly, or Flame Wings'),
+    GearItem(name: 'Shield of Cthulhu'),
+    GearItem(name: 'Fire Gauntlet / Yoyo Bag*'),
+    GearItem(name: 'Moon Stone / Warrior Emblem'),
+    GearItem(name: 'Frozen Turtle Shell / Ankh Shield'),
+    GearItem(name: 'Star Veil / Charm of Myths'),
+  ],
+  permUpgrades: [
+    GearItem(name: 'Life Fruit (20)'),
+    GearItem(name: 'Aegis Fruit'),
+  ],
+),
+
+  'pre_golem': GearLoadout(
+  weapons: [
+    GearItem(name: 'Terra Blade / The Horseman\'s Blade'),
+    GearItem(name: 'Scourge of the Corruptor / North Pole'),
+    GearItem(name: 'Flower Pow / Vampire Knives'),
+    GearItem(name: 'The Eye of Cthulhu'),
+  ],
+  armor: [
+    GearItem(name: 'Hallowed / Turtle Armor'),
+  ],
+  accessories: [
+    GearItem(name: 'Terraspark Boots'),
+    GearItem(name: 'T4/T5 Wings', note: 'Hoverboard, Bone, Spectre, Beetle, Mothron, Festive, Spooky, or Tattered Fairy Wings'),
+    GearItem(name: 'Master Ninja Gear'),
+    GearItem(name: 'Fire Gauntlet'),
+    GearItem(name: 'Moon Stone / Warrior Emblem'),
+    GearItem(name: 'Frozen Shield / Ankh Shield'),
+    GearItem(name: 'Star Veil / Charm of Myths'),
+  ],
+  permUpgrades: [
+    GearItem(name: 'n/a'),
+   
+  ],
+),
+
+  'pre_lunar_events': GearLoadout(
+  weapons: [
+    GearItem(name: 'Terra Blade / Flying Dragon'),
+    GearItem(name: 'Scourge of the Corruptor / North Pole'),
+    GearItem(name: 'Flairon / Possessed Hatchet'),
+    GearItem(name: 'The Eye of Cthulhu'),
+  ],
+  armor: [
+    GearItem(name: 'Beetle Armor'),
+  ],
+  accessories: [
+    GearItem(name: 'Terraspark Boots'),
+    GearItem(name: 'T6 Wings', note: 'Betsys, Empress, or Fishron Wings'),
+    GearItem(name: 'Master Ninja Gear'),
+    GearItem(name: 'Fire Gauntlet'),
+    GearItem(name: 'Celestial Shell'),
+    GearItem(name: 'Frozen Shield / Ankh Shield'),
+    GearItem(name: 'Soaring Insignia'),
+  ],
+  permUpgrades: [
+    GearItem(name: 'n/a'),
+    
+  ],
+),
+
+  'pre_moon_lord': GearLoadout(
+  weapons: [
+    GearItem(name: 'Terra Blade / Flying Dragon'),
+    GearItem(name: 'Daybreak'),
+    GearItem(name: 'Solar Eruption'),
+    GearItem(name: 'The Eye of Cthulhu'),
+  ],
+  armor: [
+    GearItem(name: 'Beetle Armor'),
+  ],
+  accessories: [
+    GearItem(name: 'Terraspark Boots'),
+    GearItem(name: 'T6 Wings', note: 'Betsys, Empress, or Fishron Wings'),
+    GearItem(name: 'Master Ninja Gear'),
+    GearItem(name: 'Fire Gauntlet'),
+    GearItem(name: 'Celestial Shell'),
+    GearItem(name: 'Frozen Shield / Ankh Shield'),
+    GearItem(name: 'Soaring Insignia'),
+  ],
+  permUpgrades: [
+    GearItem(name: 'n/a'),
+    
+  ],
+),
 };
