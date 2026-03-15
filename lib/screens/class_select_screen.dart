@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/player_class.dart';
 import 'progress_select_screen.dart';
@@ -34,6 +35,13 @@ class ClassSelectScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Choose Your Class'),
         centerTitle: true,
+        actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.logout),
+            label: const Text('Logout'),
+            onPressed: () => FirebaseAuth.instance.signOut(),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
