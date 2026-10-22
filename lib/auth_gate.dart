@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
 import 'screens/class_select_screen.dart';
 
@@ -16,7 +17,7 @@ class AuthGate extends StatelessWidget {
       builder: (context, snapshot) {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
+          return const SkyScaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }

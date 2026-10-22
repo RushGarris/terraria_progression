@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/player_class.dart';
+import '../theme/app_theme.dart';
 import 'gear_results_screen.dart';
 
 class ProgressSelectScreen extends StatefulWidget {
@@ -153,9 +154,12 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final done = _completedStageIds.length;
+    final total = ProgressSelectScreen.stages.length;
+
+    return SkyScaffold(
       appBar: AppBar(
-        title: Text('${widget.playerClass.name} Progress'),
+        title: Text('${widget.playerClass.name.toUpperCase()} PROGRESS'),
         actions: [
           IconButton(
             tooltip: 'Reset',
@@ -168,10 +172,13 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
           ? const Center(child: CircularProgressIndicator())
           : ListView.separated(
               padding: const EdgeInsets.all(16),
-              itemCount: ProgressSelectScreen.stages.length,
+              itemCount: total + 1,
               separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final stage = ProgressSelectScreen.stages[index];
+                if (index == 0) {
+                  return _ProgressHeader(done: done, total: total);
+                }
+                final stage = ProgressSelectScreen.stages[index - 1];
                 final isDone = _completedStageIds.contains(stage.id);
 
                 return _StageTile(
@@ -210,6 +217,57 @@ class ProgressStage {
   });
 }
 
+class _ProgressHeader extends StatelessWidget {
+  final int done;
+  final int total;
+
+  const _ProgressHeader({required this.done, required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Boss Progress',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const Spacer(),
+                Text(
+                  '$done / $total',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: AppColors.gold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(end: total == 0 ? 0 : done / total),
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeOut,
+                builder: (_, value, _) => LinearProgressIndicator(
+                  value: value,
+                  minHeight: 12,
+                  backgroundColor: AppColors.panelHigh,
+                  color: AppColors.grass,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _StageTile extends StatelessWidget {
   final ProgressStage stage;
   final VoidCallback onTap;
@@ -226,17 +284,22 @@ class _StageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final glowColor = isDone
-        ? const Color.fromARGB(255, 90, 220, 140)
-        : const Color.fromARGB(255, 211, 113, 151);
+    final glowColor = isDone ? AppColors.grass : AppColors.crimson;
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDone ? AppColors.grass : Colors.transparent,
+          width: 2,
+        ),
+      ),
       child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
@@ -244,22 +307,26 @@ class _StageTile extends StatelessWidget {
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeOut,
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: glowColor,
-                      blurRadius: 40,
+                      color: glowColor.withValues(alpha: 0.45),
+                      blurRadius: 18,
                       spreadRadius: 1,
                     ),
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: SizedBox(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
                     width: 72,
                     height: 72,
+                    padding: const EdgeInsets.all(6),
+                    color: AppColors.skyTop.withValues(alpha: 0.7),
                     child: Image.asset(
                       stage.gifPath,
                       fit: BoxFit.contain,
+                      filterQuality: FilterQuality.none,
                       alignment: Alignment.center,
                       errorBuilder: (context, error, stackTrace) =>
                           const Icon(Icons.videogame_asset, size: 40),
@@ -292,10 +359,11 @@ class _StageTile extends StatelessWidget {
                     value: isDone,
                     onChanged: (v) => onChanged(v ?? false),
                   ),
-                  const Icon(Icons.chevron_right),
+                  const Icon(Icons.chevron_right, color: AppColors.gold),
                 ],
               ),
             ],
+          ),
           ),
         ),
       ),

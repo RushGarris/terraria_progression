@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/gear_data.dart';
 import '../models/player_class.dart';
+import '../theme/app_theme.dart';
 import 'progress_select_screen.dart';
 
 class GearResultsScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class GearResultsScreen extends StatelessWidget {
       stageId: stage.id,
     );
 
-    return Scaffold(
+    return SkyScaffold(
       appBar: AppBar(
         title: Text('${playerClass.name} — ${stage.title}'),
       ),
@@ -71,6 +72,13 @@ class _Section extends StatelessWidget {
   final String title;
   final List items;
 
+  static const _icons = {
+    'Weapons': Icons.gavel,
+    'Armor': Icons.shield,
+    'Accessories': Icons.auto_awesome,
+    'Permanent Upgrades': Icons.arrow_circle_up,
+  };
+
   const _Section({
     required this.title,
     required this.items,
@@ -79,18 +87,25 @@ class _Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              children: [
+                Icon(_icons[title] ?? Icons.star, color: AppColors.gold),
+                const SizedBox(width: 10),
+                Text(
+                  title.toUpperCase(),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppColors.gold,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
+            const Divider(height: 22, color: AppColors.panelBorder),
             ...items.map((item) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
@@ -101,12 +116,14 @@ class _Section extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Container(
-                          width: 40,
-                          height: 40,
-                          padding: const EdgeInsets.all(4),
+                          width: 44,
+                          height: 44,
+                          padding: const EdgeInsets.all(5),
+                          color: AppColors.skyTop.withValues(alpha: 0.7),
                           child: Image.asset(
                             item.imagePath!,
                             fit: BoxFit.contain,
+                            filterQuality: FilterQuality.none,
                             errorBuilder: (_, _, _) =>
                                 const Icon(
                                   Icons.image_not_supported,
@@ -117,11 +134,12 @@ class _Section extends StatelessWidget {
                       )
                     else
                       const SizedBox(
-                        width: 40,
-                        height: 40,
+                        width: 44,
+                        height: 44,
                         child: Icon(
-                          Icons.check_circle_outline,
+                          Icons.diamond_outlined,
                           size: 20,
+                          color: AppColors.grass,
                         ),
                       ),
                     const SizedBox(width: 10),
