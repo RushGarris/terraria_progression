@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../models/player_class.dart';
+import '../services/guest_mode.dart';
 import '../theme/app_theme.dart';
 import 'progress_select_screen.dart';
 
@@ -38,9 +39,15 @@ class ClassSelectScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            tooltip: 'Logout',
+            tooltip: GuestMode.active.value ? 'Exit guest mode' : 'Logout',
             icon: const Icon(Icons.logout),
-            onPressed: () => FirebaseAuth.instance.signOut(),
+            onPressed: () {
+              if (GuestMode.active.value) {
+                GuestMode.exit();
+              } else {
+                FirebaseAuth.instance.signOut();
+              }
+            },
           ),
         ],
       ),

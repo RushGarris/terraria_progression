@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/player_class.dart';
+import '../services/guest_mode.dart';
 import '../theme/app_theme.dart';
 import 'gear_results_screen.dart';
 
@@ -96,6 +97,14 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
   }
 
   Future<void> _loadCompletedFromFirestore() async {
+    if (GuestMode.active.value) {
+      setState(() {
+        _completedStageIds = GuestMode.completedFor(_classId);
+        _loading = false;
+      });
+      return;
+    }
+
     try {
       final snap = await _userDoc.get();
       final data = snap.data();
@@ -131,7 +140,11 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
       }
     });
 
-    
+    if (GuestMode.active.value) {
+      GuestMode.saveCompleted(_classId, _completedStageIds);
+      return;
+    }
+
     await _userDoc.set({
       'email': FirebaseAuth.instance.currentUser?.email,
       'updatedAt': FieldValue.serverTimestamp(),
@@ -143,6 +156,11 @@ class _ProgressSelectScreenState extends State<ProgressSelectScreen> {
 
   Future<void> _resetProgress() async {
     setState(() => _completedStageIds.clear());
+
+    if (GuestMode.active.value) {
+      GuestMode.saveCompleted(_classId, _completedStageIds);
+      return;
+    }
 
     await _userDoc.set({
       'updatedAt': FieldValue.serverTimestamp(),
