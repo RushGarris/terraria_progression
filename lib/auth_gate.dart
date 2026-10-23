@@ -4,29 +4,36 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
 import 'screens/class_select_screen.dart';
+import 'services/guest_mode.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: GuestMode.active,
+      builder: (context, isGuest, _) {
+        if (isGuest) return const ClassSelectScreen();
 
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+        return StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
 
-      builder: (context, snapshot) {
+          builder: (context, snapshot) {
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SkyScaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SkyScaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
 
-        if (snapshot.hasData) {
-          return const ClassSelectScreen();
-        }
+            if (snapshot.hasData) {
+              return const ClassSelectScreen();
+            }
 
-        return const LoginScreen();
+            return const LoginScreen();
+          },
+        );
       },
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../services/guest_mode.dart';
 import '../theme/app_theme.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -120,6 +121,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           OutlinedButton(
                             onPressed: register,
                             child: const Text('Register'),
+                          ),
+                          const SizedBox(height: 6),
+                          TextButton(
+                            onPressed: GuestMode.enter,
+                            child: const Text('Continue as guest'),
                           ),
                         ],
                       ),
